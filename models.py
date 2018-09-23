@@ -24,7 +24,7 @@ class model():
         self.model = _model
 
         self.global_step = tf.Variable(0, trainable=False)
-        optim = hyper.get('optim', 'gd')
+        optim = hyper.get('optim', 'rms')
         decay = hyper.get('decay', None)
 
         if decay is not None:
@@ -38,8 +38,10 @@ class model():
             self.optim = tf.train.AdamOptimizer(self.lr)
         elif optim.lower() == 'gd':
             self.optim = tf.train.GradientDescentOptimizer(self.lr)
+        elif optim.lower() == 'rms':
+            self.optim = tf.train.RMSPropOptimizer(self.lr)
         else:
-            raise NotImplementedError("Only Adam and standard GD at the moment")
+            raise NotImplementedError("Learning algorithm not recognised")
 
         self.y_hat = self.model(self.x)
         self.square = tf.square(tf.subtract(self.y_hat, self.y), name='square_diffs')
