@@ -26,13 +26,13 @@ class model():
         self.global_step = tf.Variable(0, trainable=False)
         optim = hyper.get('optim', 'rms')
         decay = hyper.get('decay', None)
+        start_lr = hyper.get('lr', 0.0001)
 
         if decay is not None:
-            start_lr = hyper.get('lr', 0.001)
             self.lr = tf.train.exponential_decay(start_lr, self.global_step,
                                                        decay_steps=1000, decay_rate=decay, staircase=True)
         else:
-            self.lr = hyper.get('lr', 0.001)
+            self.lr = start_lr
 
         if optim.lower() == 'adam':
             self.optim = tf.train.AdamOptimizer(self.lr)

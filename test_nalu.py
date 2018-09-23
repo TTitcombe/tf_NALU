@@ -15,17 +15,22 @@ def generate_data(n,z=100, min=-1., max=1., op = 'add', seed=42):
     b = np.sum(x[:,_b], axis=1)
 
     if op == 'add':
-        y = a
+        y = a + b
+    elif op == 'subtract':
+        y = a - b
     elif op == 'multiply':
         y = a * b
+    elif op == 'divide':
+        y = a / b
     else:
-        raise NotImplementedError("Only addition and multiplication problems")
+        raise NotImplementedError("Problem not recognised")
     y = np.reshape(y, (y.shape[0],1))
 
     return x, y
 
-x, y = generate_data(1000)
-x_extrapolate, y_extrapolate = generate_data(100, min=-10., max=10.)
+_op = 'multiply'
+x, y = generate_data(1000, op=_op)
+x_extrapolate, y_extrapolate = generate_data(100, min=-10., max=10., op=_op)
 
 INPUT = 100
 OUTPUT = 1
@@ -36,7 +41,7 @@ train_model = Trainer(INPUT, OUTPUT, HIDDEN)
 train_model.train(x, y, x_extrapolate, y_extrapolate, 128, 1000)'''
 
 print('Testing single NALU...')
-nalu_model = Trainer(INPUT, OUTPUT, [50], model_type='nalu')
+nalu_model = Trainer(INPUT, OUTPUT, model_type='nalu_single')
 nalu_model.train(x, y, x_extrapolate, y_extrapolate, 128, 1000)
 
 '''print('Testing NALU....')
