@@ -29,7 +29,7 @@ Naming convention:
 * "small". In small experiments, the x data has 2 dimensions. These dimensions were e.g. multiplied together in the multiplication test.
 If small is not present in the name, then x data has 100 dimensions. Two samples of size 10 (without replacement) were taken. The data in each sample are summed together. These sums are then e.g. multiplied together for the multiplication experiment.
 
-#### Static Numerical (Small)
+### Static Numerical (Small)
 **Interpolation**: NAC > relu6 > NALU > random for addition and subtraction. Is this a bug or down to hyperparam tuning?
 NALU > relu6 > NAC > random for the remainder of the tests.
 
