@@ -24,7 +24,7 @@ Currently have only performed the experiments of section 4.1 of the paper, the s
 In the results directory are several text files, for various experiments.
 
 Naming convention:
-* I for interpolation, E for extrapolation
+* I for interpolation (between -1. and 1.), E for extrapolation (between -10. and 10.)
 * add/subtract/multiply etc. defines the operation used to calculate the target data
 * "small". In small experiments, the x data has 2 dimensions. These dimensions were e.g. multiplied together in the multiplication test.
 If small is not present in the name, then x data has 100 dimensions. Two samples of size 10 (without replacement) were taken. The data in each sample are summed together. These sums are then e.g. multiplied together for the multiplication experiment.
