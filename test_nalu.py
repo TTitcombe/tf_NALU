@@ -10,7 +10,7 @@ operations = {
 'multiply': lambda x,y: x * y,
 'divide': lambda x, y: x / y,
 'square': lambda x, y: x**2,
-'root': lambda x, y: np.sqrt(x + 1e-6)
+'root': lambda x, y: np.sqrt(np.abs(x))
 }
 
 def generate_data(n,z=2, min=-1., max=1., select = 1, op = 'add', seed=42):
