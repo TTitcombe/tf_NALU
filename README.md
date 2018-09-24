@@ -1,6 +1,6 @@
 # TF Neural Arithmetic Logic Unit
 
-[[https://github.com/TTitcombe/tf_NALU/blob/master/figures/extrapolation_test.png]]
+![Extrapolation test](https://github.com/TTitcombe/tf_NALU/blob/master/figures/extrapolation_test.png)
 
 A TensorFlow implementation of the paper ["Neural Arithmetic Logic Units"](https://arxiv.org/pdf/1808.00508.pdf) by Andrew Trask, Felix Hill, Scott Reed, Jack Rae, Chris Dyer, Phil Blunsom.
 
