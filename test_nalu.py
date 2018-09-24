@@ -35,7 +35,7 @@ def test(models, x_train, y_train, x_tests, y_tests,
             N_epochs, filename):
     global results_dir
     losses = {}
-    N_test_data = len(x_Is)
+    N_test_data = len(x_tests)
 
     for model_type in models:
         tf.reset_default_graph()
@@ -72,7 +72,6 @@ if __name__ == '__main__':
     N_epochs = int(1e4)
     batch_size = 100
     for _op in ['add', 'subtract', 'multiply', 'divide', 'square', 'root']:
-        #_op = 'subtract'
         x, y = generate_data(1000, z=INPUT, op=_op)
         x_tests = []
         y_tests = []
