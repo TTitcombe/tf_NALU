@@ -1,8 +1,20 @@
 import numpy as np
 
 from trainer import Trainer
+from models import Model
+
+operations = {
+'add': lambda x, y: x + y,
+'subtract': lambda x,y: x - y,
+'multiply': lambda x,y: x * y,
+'divide': lambda x, y: x / y,
+'square': lambda x, y: x**2,
+'root': lambda x, y: np.sqrt(x)
+}
 
 def generate_data(n,z=100, min=-1., max=1., op = 'add', seed=42):
+    global operations
+
     if seed is not None:
         np.random.seed(seed)
 
@@ -14,36 +26,32 @@ def generate_data(n,z=100, min=-1., max=1., op = 'add', seed=42):
     a = np.sum(x[:,_a], axis=1)
     b = np.sum(x[:,_b], axis=1)
 
-    if op == 'add':
-        y = a + b
-    elif op == 'subtract':
-        y = a - b
-    elif op == 'multiply':
-        y = a * b
-    elif op == 'divide':
-        y = a / b
-    else:
-        raise NotImplementedError("Problem not recognised")
+    y = operations[op](a,b)
     y = np.reshape(y, (y.shape[0],1))
 
     return x, y
 
-_op = 'multiply'
-x, y = generate_data(1000, op=_op)
-x_extrapolate, y_extrapolate = generate_data(100, min=-10., max=10., op=_op)
 
-INPUT = 100
-OUTPUT = 1
-HIDDEN = [50]
+if __name__ == '__main__':
+    _op = 'add'
+    x, y = generate_data(1000, op=_op)
+    x_extrapolate, y_extrapolate = generate_data(100, min=-10., max=10., op=_op)
 
-'''print('Testing NAC...')
-train_model = Trainer(INPUT, OUTPUT, HIDDEN)
-train_model.train(x, y, x_extrapolate, y_extrapolate, 128, 1000)'''
+    INPUT = 100
+    OUTPUT = 1
+    HIDDEN = [2]
 
-print('Testing single NALU...')
-nalu_model = Trainer(INPUT, OUTPUT, model_type='nalu_single')
-nalu_model.train(x, y, x_extrapolate, y_extrapolate, 128, 1000)
+    models = ['nalu', 'relu']
+    losses = {}
 
-'''print('Testing NALU....')
-nalu_model = Trainer(INPUT, OUTPUT, HIDDEN, model_type='nalu')
-nalu_model.train(x, y, x_extrapolate, y_extrapolate, 128, 1000)'''
+    for model_type in models:
+        print("Testing {}...".format(model_type))
+        model = Model(INPUT, OUTPUT, HIDDEN, model_type=model_type)
+        trainer = Trainer(model)
+        trainer.train(x, y, x_extrapolate, y_extrapolate, 128, 10000)
+        err, loss = model._validate(x_extrapolate, y_extrapolate)
+        losses[model_type] = loss
+
+    for k, v in losses.items():
+        print(k)
+        print(v)

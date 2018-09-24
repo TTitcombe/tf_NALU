@@ -12,7 +12,8 @@ class NAC_cell():
         '''
         self.scope_name = scope_name
 
-        initialiser = tf.contrib.layers.xavier_initializer()
+        #initialiser = tf.contrib.layers.xavier_initializer()#
+        initialiser = tf.truncated_normal_initializer()
         with tf.variable_scope(scope_name):
             W_hat = tf.get_variable("W_hat", [input_dim, output_dim], initializer=initialiser)
             M_hat = tf.get_variable("M_hat", [input_dim, output_dim], initializer=initialiser)
@@ -38,9 +39,10 @@ class NALU_cell():
         scope_n defines NALU number within the model, to avoid naming errors
         '''
         self.scope_n = scope_n
-        self.eps = 10e-6
+        self.eps = 10e-7
 
-        initialiser = tf.contrib.layers.xavier_initializer()
+        #initialiser = tf.contrib.layers.xavier_initializer()
+        initialiser = tf.truncated_normal_initializer()
         with tf.variable_scope('NALU_{}'.format(scope_n)):
             self.nac = NAC_cell(input_dim, output_dim)
 
