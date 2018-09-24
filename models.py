@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
-from nalu import NAC_cell, NALU_cell, NALU
+from nalu import NAC, NALU
 from mlp import MLP
 
 class Model():
@@ -9,16 +9,14 @@ class Model():
     A class to store the learning hyperparameters of the NALU network
     e.g. learning rate, learning algorithm, decay rate etc.
     '''
-    def __init__(self, input_dim, output_dim, hidden_dim, model_type, hyper = {}):
+    def __init__(self, input_dim, output_dim, hidden_dim = [2], model_type='nalu', hyper = {}):
         self.x = tf.placeholder(tf.float32, [None, input_dim], name='input')
         self.y = tf.placeholder(tf.float32, [None, output_dim], name='ouput')
 
         if model_type == 'nalu':
             _model = NALU(input_dim, output_dim, hidden_dim)
-        elif model_type == 'nalu_single':
-            _model = NALU_cell(input_dim, output_dim)
         elif model_type == 'nac':
-            _model = NAC_cell(input_dim, output_dim)
+            _model = NAC(input_dim, output_dim)
         else:
             _model = MLP(input_dim, output_dim, hidden_dim, act_func = model_type)
 

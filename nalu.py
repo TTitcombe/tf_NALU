@@ -5,21 +5,21 @@ class NAC_cell():
     '''
     A Basic Neural Accumulator Cell
     '''
-    def __init__(self, input_dim, output_dim, scope_name='NAC_1'):
+    def __init__(self, input_dim, output_dim, scope_n='0'):
         '''
         scope_name is to avoid naming errors if multiple NACs are defined in the
         same model
         '''
-        self.scope_name = scope_name
+        self.scope_n = scope_n
 
         #initialiser = tf.contrib.layers.xavier_initializer()#
         initialiser = tf.truncated_normal_initializer()
-        with tf.variable_scope(scope_name):
+        with tf.variable_scope("NAC_{}".format(scope_n)):
             W_hat = tf.get_variable("W_hat", [input_dim, output_dim], initializer=initialiser)
             M_hat = tf.get_variable("M_hat", [input_dim, output_dim], initializer=initialiser)
 
     def __call__(self, x_input):
-        with tf.variable_scope(self.scope_name, reuse=True):
+        with tf.variable_scope("NAC_{}".format(self.scope_n), reuse=True):
             W_hat = tf.get_variable("W_hat")
             M_hat = tf.get_variable("M_hat")
 
@@ -27,6 +27,42 @@ class NAC_cell():
         output = tf.matmul(x_input, W, name='NAC_output')
 
         return output
+
+class NAC():
+    '''
+    A model comprised of multiple (consecutive) NAC modules.
+    '''
+    def __init__(self, input_dim, output_dim, hidden_dim=[]):
+        '''
+        inputs:
+            input_dim | int, number of dimensions on the x data
+            output_dim | int, number of dimensions on the y data
+            hidden_dim | list of ints (or empty list), hidden dimensions of
+                        NALU modules in this model
+                        Number of NALU modules = length of hidden_dim + 1
+        '''
+        hid_dim_type = type(hidden_dim) is list or hidden_dim is None
+        assert hid_dim_type, "hidden_dim must be None or a list"
+
+        self._layers = []
+        if len(hidden_dim) > 0:
+            for i, dim in enumerate(hidden_dim):
+                if i == 0:
+                    old_dim = input_dim
+                else:
+                    old_dim = hidden_dim[i-1]
+                self._layers.append(NAC_cell(old_dim, dim, scope_n=str(i)))
+            input_dim = hidden_dim[-1]
+
+        self._layers.append(
+        NAC_cell(input_dim, output_dim, scope_n=str(len(hidden_dim)))
+        )
+
+    def __call__(self, x_input):
+        for k, cell in enumerate(self._layers):
+            x_input = cell(x_input)
+
+        return x_input
 
 
 class NALU_cell():

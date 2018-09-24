@@ -41,15 +41,15 @@ if __name__ == '__main__':
     OUTPUT = 1
     HIDDEN = [2]
 
-    models = ['nalu', 'relu']
+    models = ['nac', 'nalu', 'relu']
     losses = {}
 
     for model_type in models:
         print("Testing {}...".format(model_type))
         model = Model(INPUT, OUTPUT, HIDDEN, model_type=model_type)
         trainer = Trainer(model)
-        trainer.train(x, y, x_extrapolate, y_extrapolate, 128, 10000)
-        err, loss = model._validate(x_extrapolate, y_extrapolate)
+        trainer.train(x, y, x_extrapolate, y_extrapolate, 128, 1000)
+        err, loss = trainer._validate(x_extrapolate, y_extrapolate)
         losses[model_type] = loss
 
     for k, v in losses.items():
