@@ -1,5 +1,7 @@
 # TF Neural Arithmetic Logic Unit
 
+[[https://github.com/TTitcombe/tf_NALU/blob/master/figures/extrapolation_test.png]]
+
 A TensorFlow implementation of the paper ["Neural Arithmetic Logic Units"](https://arxiv.org/pdf/1808.00508.pdf) by Andrew Trask, Felix Hill, Scott Reed, Jack Rae, Chris Dyer, Phil Blunsom.
 
 Explanation of the paper, and a write-up of this code, can be found [here](https://medium.com/@t.j.titcombe/understanding-neural-arithmetic-logic-units-5ca9d0041473).
