@@ -16,10 +16,11 @@ def generate_data(n, min=-5., max=5., seed=42):
 
 def testing(x, x_E, hidden):
     results = {}
-    for act_func in ['relu', 'leaky', 'sigmoid', 'tanh']:
+    for act_func in ['relu6','relu', 'leaky', 'sigmoid', 'tanh']:
         results[act_func] = np.zeros((1000,))
         print('Testing {}...'.format(act_func))
-        for _ in range(100):
+        N_repeats = 50
+        for _ in range(N_repeats):
             g = tf.Graph()
             with g.as_default():
                 model = Model(1, 1, hidden, model_type=act_func)
@@ -31,7 +32,7 @@ def testing(x, x_E, hidden):
             results[act_func] += final_output
 
     for k, v in results.items():
-        plt.scatter(x_E, v/100, label=k)
+        plt.scatter(x_E, v/N_repeats, label=k)
     plt.legend()
     plt.show()
 

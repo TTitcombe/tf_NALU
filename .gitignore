@@ -1,1 +1,5 @@
+#graphs not yet ready
 *.png
+
+#interpolation results not ready
+*.txt

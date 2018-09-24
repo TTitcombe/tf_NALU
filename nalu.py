@@ -75,7 +75,7 @@ class NALU_cell():
         scope_n defines NALU number within the model, to avoid naming errors
         '''
         self.scope_n = scope_n
-        self.eps = 10e-7
+        self.eps = 1e-7
 
         #initialiser = tf.contrib.layers.xavier_initializer()
         initialiser = tf.truncated_normal_initializer()

@@ -25,7 +25,7 @@ class Model():
         self.global_step = tf.Variable(0, trainable=False)
         optim = hyper.get('optim', 'rms')
         decay = hyper.get('decay', None)
-        start_lr = hyper.get('lr', 10e-5)
+        start_lr = hyper.get('lr', 1e-2)
 
         if decay is not None:
             self.lr = tf.train.exponential_decay(start_lr, self.global_step,

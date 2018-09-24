@@ -13,22 +13,24 @@ class Trainer():
         self._Sess = None
         self.model = model
 
+        if self._Sess is None:
+            self._Sess = tf.Session()
+            init = tf.global_variables_initializer()
+            self._Sess.run(init)
+
     def train(self, x, y, x_val, y_val, batchSize, n_epochs):
         self.bs = batchSize
         self.n_steps = x.shape[0] // batchSize
         if x.shape[0] / batchSize != float(self.n_steps):
             self.n_steps += 1
 
-        if self._Sess is None:
-            self._Sess = tf.Session()
-            init = tf.global_variables_initializer()
-            self._Sess.run(init)
-
         for epoch in range(n_epochs):
             tr_err, tr_loss, te_err, te_loss = self._train_epoch(epoch, x, y, x_val, y_val)
             if epoch % 100 == 0:
-                print("Training err: {}".format(tr_err))
-                print("Testing err: {}".format(te_err))
+                print("Epoch: {}".format(epoch))
+                print("Training err: {}".format(tr_loss))
+                print("Testing err: {}".format(te_loss))
+                print("\n")
 
     def _train_epoch(self, epoch, x, y, x_val, y_val):
         for step in range(self.n_steps):
