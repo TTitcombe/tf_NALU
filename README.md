@@ -11,4 +11,9 @@ To test, run **test_nalu.py**
 ### TODO
 * Hyperparameter tune
 * Perform numerical extrapolation experiment (section 1.1. in original paper)
+    - Graph of mean absolute error against input value does not match the paper well
+* Test interpolation of static numerical tests
+    - NALU and NAC both outperformed by relu6 on interpolation addition. Is this due to poor tuning or a bug?
+* Test extrapolation of static numerical tests
+    - Succeed in interpolation first
 
