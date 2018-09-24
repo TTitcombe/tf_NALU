@@ -10,6 +10,8 @@ This code currently provides a NAC module, a NALU module, and a MLP.
 
 To perform the static numerical tests, run **test_nalu.py**.
 
+The proof-of-necessity experiment in the paper, trying to learn the identity mapping with a neural network, can be carried out in **test_extrapolation.py**. The results of the quick test done with this code can be seen above.
+
 ## Project structure
 This code is written in a way to make training and testing as quick and scalable as possible:
 * The NAC and NALU models are defined in **nalu.py**. They contain **__init__** and **__call__** methods only.
@@ -44,8 +46,6 @@ Good news: NAC achieved 0.0 error in addition and subtraction.
 
 ## TODO
 * Hyperparameter tune
-* Perform numerical extrapolation experiment (section 1.1. in original paper)
-    - Graph of mean absolute error against input value does not match the paper well
 * Test interpolation of static numerical tests
     - NALU and NAC both outperformed by relu6 on large interpolation addition. WHY?!
 * Test extrapolation of static numerical tests
