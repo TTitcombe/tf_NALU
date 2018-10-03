@@ -1,3 +1,6 @@
 __pycache__/
 
 tmp.png
+
+results/
+!results/E_all.txt

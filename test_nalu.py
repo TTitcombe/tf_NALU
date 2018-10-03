@@ -30,6 +30,7 @@ def generate_data(n,z=2, min=-1., max=1., select = 1, op = 'add', seed=42):
 
     return x, y
 
+
 def test(models, x_train, y_train, x_tests, y_tests,
             INPUT, OUTPUT, HIDDEN, batch_size,
             N_epochs, filename):
@@ -55,13 +56,14 @@ def test(models, x_train, y_train, x_tests, y_tests,
             losses[model_type] += loss
         losses[model_type] /= N_test_data
 
-    with open(results_dir + filename, "w") as f:
+    with open(results_dir + filename, "a") as f:
         for k, v in losses.items():
             f.write("{}: {} \n".format(k,round(v,5)))
 
 
 if __name__ == '__main__':
     results_dir = 'results/'
+    filename = "I_all.txt"
 
     INPUT = 2
     OUTPUT = 1
@@ -71,7 +73,7 @@ if __name__ == '__main__':
 
     N_epochs = int(1e4)
     batch_size = 100
-    for _op in ['add', 'subtract', 'multiply', 'divide', 'square', 'root']:
+    for _op in ['multiply', 'divide', 'square', 'root']:
         x, y = generate_data(1000, z=INPUT, op=_op)
         x_tests = []
         y_tests = []
@@ -82,6 +84,9 @@ if __name__ == '__main__':
             x_tests.append(x_test)
             y_tests.append(y_test)
 
+        with open(results_dir + filename, "a") as f:
+            f.write("Operation: {} \n".format(_op))
+
         models = ['nac', 'nalu', 'relu6', 'random']
         test(models, x, y, x_tests, y_tests, INPUT, OUTPUT, HIDDEN,
-                batch_size, N_epochs, "E_{}_small.txt".format(_op))
+                batch_size, N_epochs, filename)

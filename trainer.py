@@ -42,10 +42,10 @@ class Trainer():
             i = epoch * self.n_steps + step
             train_error, train_loss = self._train_step(i, x_batch, y_batch)
 
-            if step == 0:
-                test_error, test_loss = self._validate(x_val, y_val)
+            #if step == 0:
+            #    test_error, test_loss = self._validate(x_val, y_val)
 
-        return train_error, train_loss, test_error, test_loss
+        return train_error, train_loss, 0, 0
 
     def _train_step(self, i, x, y):
         feed_dict = {self.model.x: x,

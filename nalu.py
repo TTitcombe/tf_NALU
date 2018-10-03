@@ -81,6 +81,7 @@ class NALU_cell():
         initialiser = tf.truncated_normal_initializer()
         with tf.variable_scope('NALU_{}'.format(scope_n)):
             self.nac = NAC_cell(input_dim, output_dim)
+            self.log_nac = NAC_cell(input_dim, output_dim, scope_n='1')
 
             G = tf.get_variable('G', [input_dim, output_dim], initializer=initialiser)
             b_g = tf.get_variable('b_g', [output_dim,], initializer=tf.zeros_initializer())
@@ -94,7 +95,7 @@ class NALU_cell():
 
             #log space
             log_x = tf.log(tf.abs(x_input) + self.eps)
-            m = self.nac(log_x)
+            m = self.log_nac(log_x)
             m = tf.exp(m, name='m')
 
             G = tf.get_variable('G')
