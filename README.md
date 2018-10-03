@@ -39,9 +39,8 @@ NALU > relu6 > NAC > random for the remainder of the tests.
 
 Clearly something isn't working perfectly: As a NALU is a generalised NAC, NALU should be able to perform *as well as* NAC in add and sub tasks.
 
-**Extrapolation**: NAC > relu6 > random > NALU in addition and subtraction. NALU is...somehow worse than random? **need to find out why**.
-
-Good news: NAC achieved 0.0 error in addition and subtraction.
+**Extrapolation**: NAC > NALU > Relu6 > MLP in addition and subtraction. NALU should be equal to NAC?
+NALU performs best on multiplication, division, squaring, rooting!
 
 
 ## TODO
