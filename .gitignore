@@ -2,5 +2,10 @@ __pycache__/
 
 tmp.png
 
-results/
-!results/E_all.txt
+
+# Old code to not upload
+old_code/
+old_results/
+
+# Results not yet ready
+results/Interpolation.txt
