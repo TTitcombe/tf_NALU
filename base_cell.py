@@ -8,7 +8,7 @@ class BaseCell:
         self.y = tf.placeholder(tf.float32, [None, output_dim], name='ouput')
 
         optim = hyper.get('optim', 'rms')
-        self.lr = hyper.get('lr', 0.01)
+        self.lr = hyper.get('lr', 0.005)
 
         if optim.lower() == 'adam':
             self.optim = tf.train.AdamOptimizer(self.lr)
