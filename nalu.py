@@ -5,13 +5,18 @@ from base_cell import BaseCell
 from utils import (operations, calcYFromOperation, gridSearch)
 
 class NALU(BaseCell):
-    def __init__(self, input_dim, hidden_dim, output_dim, hyper={}):
+    def __init__(self, input_dim, hidden_dim, output_dim, hyper={}, layers=2):
         super(NALU,self).__init__(input_dim, hidden_dim, output_dim, hyper)
 
         self.build(input_dim, hidden_dim, output_dim)
 
-        self.error = tf.reduce_mean(tf.abs((self.y_hat - self.y)/self.y), name='mean_abs_error')
-        self.square = tf.square(self.y_hat - self.y, name='square_diffs')
+        if layers == 2:
+            output = self.y_hat
+        elif layers == 1:
+            output = self.y_layer1
+
+        self.error = tf.reduce_mean(tf.abs((output - self.y)/self.y), name='mean_abs_error')
+        self.square = tf.square(output - self.y, name='square_diffs')
         self.loss = tf.reduce_mean(self.square, name='loss')
         self.optimise = self.optim.minimize(self.loss)
 
@@ -29,7 +34,7 @@ class NALU(BaseCell):
             self.W1 = W
 
             G = tf.get_variable('G', [input_dim, hidden_dim], initializer=initialiser)
-            g = tf.nn.sigmoid(tf.matmul(self.x, G), name='g')
+            g = tf.nn.sigmoid(tf.matmul(self.x, G), name='g_weighting')
 
             a = tf.matmul(self.x, W, name='a')
 
@@ -38,6 +43,7 @@ class NALU(BaseCell):
             m = tf.exp(m, name='m')
 
             output = tf.add(tf.multiply(g,a), tf.multiply((1-g),m), name='NALU_output')
+        self.y_layer1 = output
 
         with tf.variable_scope("NALU_2"):
             W_hat = tf.get_variable("W_hat", [hidden_dim, output_dim], initializer=initialiser)
@@ -46,7 +52,7 @@ class NALU(BaseCell):
             self.W2 = W
 
             G = tf.get_variable('G', [hidden_dim, output_dim], initializer=initialiser)
-            g = tf.nn.sigmoid(tf.matmul(output, G), name='g')
+            g = tf.nn.sigmoid(tf.matmul(output, G), name='g_weighting')
 
             a = tf.matmul(output, W, name='a')
 
@@ -57,10 +63,22 @@ class NALU(BaseCell):
             output = tf.add(tf.multiply(g,a), tf.multiply((1-g),m), name='NALU_output')
         self.y_hat = output
 
-    def evalTensors(self):
+    def evalTensors(self, x):
         w1 = self._Sess.run(self.W1)
         w2 = self._Sess.run(self.W2)
-        return w1, w2
+
+        with tf.variable_scope("NALU_1", reuse=True):
+            G1 = tf.get_variable("G")
+        g1 = tf.get_default_graph().get_operation_by_name("NALU_1/g_weighting")
+        with tf.variable_scope("NALU_2", reuse=True):
+            G2 = tf.get_variable("G")
+        g2 = tf.get_default_graph().get_operation_by_name("NALU_2/g_weighting")
+
+        G1_val = self._Sess.run(G1)
+        G2_val = self._Sess.run(G2)
+        g1_val = self._Sess.run(g1, {self.x:x})
+        g2_val = self._Sess.run(g2, {self.x:x})
+        return w1, w2, G1_val, G2_val, g1_val, g2_val
 
 if __name__ == "__main__":
     def calcOperations(x, x_test):
@@ -93,26 +111,42 @@ if __name__ == "__main__":
                 f.write("\nBest lr: {}\n".format(results[0]))
                 f.write("\nBest error: {}\n".format(results[1]))
 
-    def trainAndGetTensors(x, x_test, op):
-        y = calcYFromOperation(x, op)
-        y_test = calcYFromOperation(x_test, op)
+    def trainAndGetTensors(x, x_test, op, model):
+        y = calcYFromOperation(x, op, 2, 1)
+        y_test = calcYFromOperation(x_test, op, 2, 1)
 
-        model = NALU(100, 2, 1)
-        model.train(x, y, x_test, y_test)
+        model.train(x, y, x_test, y_test, N_epochs=50000)
 
-        w1, w2 = model.evalTensors()
-        print(w1)
-        print(w2)
+        w1, w2, G1, G2, g1, g2 = model.evalTensors(x_test)
+
+        return [w1, G1, g1]
 
 
     print("Testing NALU cell...")
 
     np.random.seed(42)
-    x = np.random.uniform(10, 15, size=(10000,100))
-    x_test = np.random.uniform(10, 15, size=(1000, 100))
+    x = np.random.uniform(10, 100, size=(10,2))
+    x_test = np.random.uniform(10, 100, size=(1, 2))
+
+    results_dir = 'results/'
+    filename = "Weights_Sanity_Test.txt"
 
     #calcOperations(x, x_test)
-    trainAndGetTensors(x, x_test, "add")
+    weights = {}
+    with open(results_dir + filename, "a") as f:
+        f.write("NALU Sanity Check\n")
+    for k, _ in operations.items():
+        tf.reset_default_graph()
+        model = NALU(2, 1, 1, layers=1)
+        weights[k] = trainAndGetTensors(x, x_test, k, model)
+
+    with open(results_dir + filename, "a") as f:
+        for k, v in weights.items():
+            print("{}: {} \n {} \n {}".format(k, v[0], v[1], v[2]))
+            f.write("{}\n".format(k))
+            f.write("W: {}\n".format(v[0]))
+            f.write("G: {}\n".format(v[1]))
+            f.write("g: {}\n".format(v[2]))
 
 
     # Best addition: 0.01712 (0.0005)

@@ -92,7 +92,7 @@ if __name__ == "__main__":
         print(w2)
 
 
-    print("Testing NALU cell...")
+    print("Testing NAC cell...")
 
     np.random.seed(42)
     x = np.random.uniform(10, 100, size=(10,2))
