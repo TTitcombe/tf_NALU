@@ -1,0 +1,42 @@
+Static arithmetic task. 15 dimensions from 100.
+50000 training data points uniformly distributed between 0 and 1000
+1000 test data points uniformly distributed between 1000 and 10000
+10000 training epochs. RMSProp optimiser.
+
+absolute | relative
+
+add
+NAC err: 3.0792234610999e-05        | 7.03e-15
+NALU err: 487297.375                | 0.000111
+MLP err: 7656996.0                  | 0.00175
+Random err: 4380288000.0            | 1.0
+
+subtract
+NAC err: 3.585815284168348e-05      | 5.03e-14
+NALU err: 0.0017997436225414276     | 2.52e-12
+MLP err: 2009483.25                 | 0.00282
+Random err: 713577984.0             | 1.0
+
+multiply
+NAC err: 2.1864312704335872e+17     | 0.996
+NALU err: 9.147941897057075e+16     | 0.417
+MLP err: 1.7982993708613632e+17     | 0.819
+Random err: 2.1955027567588147e+17  | 1.0
+
+divide
+NAC err: 2980440.75                 | 0.00120
+NALU err: 48435.09375               | 1.96e-05
+MLP err: 622.9837036132812          | 2.52e-07
+Random err: 2476542720.0            | 1.0
+
+root
+NAC err: 332534.5                   | 0.00199
+NALU err: 33217.0                   | 0.000198
+MLP err: 76750.125                  | 0.000458
+Random err: 167470912.0             | 1.0
+
+square
+NAC err: 3.7940341964317655e+19     | 0.999
+NALU err: 3.0197994497891107e+19    | 0.796
+MLP err: 3.1348160626358747e+19     | 0.826
+Random err: 3.7953091901153346e+19  | 1.0

@@ -1,37 +1,38 @@
-NALU Sanity Check
+Sanity check. Training a 1-layer NALU on 10 2-dimensional data points.
+Training until no change to weights.
+
+g is the weighting between normal space and log space
+g of 1 means NALU is effectively a NAC.
+This sanity check shows that NALU can learn a toy arithmetic problem (almost) exactly.
+
+NALU
+
 add
-W: [[1.        ]
- [0.46917313]]
-G: [[ 0.9495521 ]
- [-0.41357267]]
-g: None
+W: [[0.99999833]
+ [0.99999845]]
+g: [[1.]]
+
 subtract
 W: [[ 0.9999954]
  [-0.9999966]]
-G: [[0.20883524]
- [0.21534292]]
-g: None
+g: [[1.]]
+
 multiply
 W: [[1.]
  [1.]]
-G: [[-1.4939419 ]
- [-0.12563457]]
-g: None
+g: [[6.488486e-23]]
+
 divide
-W: [[ 0.02884924]
- [-0.00591125]]
-G: [[0.88037926]
- [1.7707695 ]]
-g: None
+W: [[ 0.9997821]
+ [-0.9997439]]
+g: [[0.]]
+
 square
 W: [[1.        ]
- [0.99161065]]
-G: [[-0.55744916]
- [-0.75179875]]
-g: None
+ [0.99161106]]
+g: [[8.925971e-37]]
+
 root
-W: [[0.11027151]
- [0.02313659]]
-G: [[-0.29774174]
- [ 0.95951617]]
-g: None
+W: [[5.0062293e-01]
+ [1.9539354e-07]]
+g: [[3.8561367e-09]]
