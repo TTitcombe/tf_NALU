@@ -8,44 +8,25 @@ Explanation of the paper, and a write-up of this code, can be found [here](https
 
 This code currently provides a NAC module, a NALU module, and a MLP.
 
-To perform the static numerical tests, run **test_nalu.py**.
+To perform the static numerical tests, run **static_arithmetic_task.py**.
 
-The proof-of-necessity experiment in the paper, trying to learn the identity mapping with a neural network, can be carried out in **test_extrapolation.py**. The results of the quick test done with this code can be seen above.
+The proof-of-necessity experiment in the paper, trying to learn the identity mapping with a neural network, can be carried out in **test_nn_extrapolation.py**. The results of the quick test done with this code can be seen above.
 
-## Project structure
-This code is written in a way to make training and testing as quick and scalable as possible:
-* The NAC and NALU models are defined in **nalu.py**. They contain **__init__** and **__call__** methods only.
-Calling the object takes a tensor as input (not as a placeholder), and returns an output tensor.
-* **models.py** contains the **Model** class. This class is where the x and y tensor placeholders are stored, and the learning hyperparameters such as
-learning rate and algorithm are decided. This class passes the data through one of the models in **nalu.py** to define the graph. Loss and error are defined in this class
-* **trainer.py** contain the **Trainer** class. This class takes the entire x and y data, splits it into batches, and perform the step and epoch logic by passing a batch to the defined **Model** class.
-
-So **Trainer** contains **Model** contains **NALU**.
 
 ## Results
+
+### Sanity Check
+I completed a quick sanity check by training a 1-layer NALU on 10 2-dimensional data points until loss became unchanged (a smaller version of the static arithmetic task).
+Looking at the weight values (W) and g in results/Weights_Sanity_Test.txt, we can see that the NALU learns almost perfectly how to model basic arithmetic functions in this toy example. We're good to continue with the more complex tasks!
+
+### Static Arithmetic
 Currently have only performed the experiments of section 4.1 of the paper, the static numerical tests (addition, subtraction, multiplication, division, square, square root).
 
-In the results directory are several text files, for various experiments.
+The results can be seen in results/static_arithmetic_test.txt
+We can see that, for all operations except for divide, NAC or NALU achieved the best results. The results for divide are not surprising, as having a/b will be close to 1 unless a >> b or b << a, thus making it quite easy for a MLP to find some local minimum near its initialised state. To combat this one could draw a and b from a greater number of data dimensions, and make the difference between them more distinct i.e. a is the sum of 20 dimensions, b is the sum of 5.
 
-Naming convention:
-* I for interpolation (between -1. and 1.), E for extrapolation (between -10. and 10.)
-* add/subtract/multiply etc. defines the operation used to calculate the target data
-* "small". In small experiments, the x data has 2 dimensions. These dimensions were e.g. multiplied together in the multiplication test.
-If small is not present in the name, then x data has 100 dimensions. Two samples of size 10 (without replacement) were taken. The data in each sample are summed together. These sums are then e.g. multiplied together for the multiplication experiment.
+For addition and subtraction, NAC outperformed NALU. While NALU can learn to act as a NAC, these results are to be expected due to the extra complexity of a NALU - its more difficult to learn to become a high-performing NAC than for the NAC to learn to be high-performing.
 
-### Static Numerical (Small)
-**Interpolation**: NAC > relu6 > NALU > random for addition and subtraction. Is this a bug or down to hyperparam tuning?
-NALU > relu6 > NAC > random for the remainder of the tests.
-
-Clearly something isn't working perfectly: As a NALU is a generalised NAC, NALU should be able to perform *as well as* NAC in add and sub tasks.
-
-**Extrapolation**: NAC > NALU > Relu6 > MLP in addition and subtraction. NALU should be equal to NAC?
-NALU performs best on multiplication, division, squaring, rooting!
+Note that I did very minimal hyper-perameter tuning, and number of data points and epochs were kept to a minimum, because I am not made of compute. Compared to the paper, it's clear that I've found suboptimal solutions. However, these results are enough to convince me of the power of the NALU.
 
 
-## TODO
-* Hyperparameter tune
-* Test interpolation of static numerical tests
-    - NALU and NAC both outperformed by relu6 on large interpolation addition. WHY?!
-* Test extrapolation of static numerical tests
-    - Succeed in interpolation first
