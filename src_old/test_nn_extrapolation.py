@@ -8,11 +8,13 @@ import tensorflow as tf
 
 from mlp import MLP
 
+
 def generate_data(n, min=-5., max=5., seed=42):
     if seed is not None:
         np.random.seed(seed)
     x = np.random.uniform(min, max, size=(n,1))
     return x
+
 
 def testing(x, x_E, hidden):
     results = {}
@@ -31,12 +33,14 @@ def testing(x, x_E, hidden):
 
     return results, x_E[:,0]
 
+
 def plot(results, x, save_name):
     for k, v in results.items():
         plt.scatter(x, v, label=k)
     plt.legend()
     plt.savefig(save_name)
     plt.show()
+
 
 if __name__ == '__main__':
     x = generate_data(10000)

@@ -1,7 +1,7 @@
-import numpy as np
 import tensorflow as tf
 
 from base_cell import BaseCell
+
 
 class NALU(BaseCell):
     def __init__(self, input_dim, hidden_dim, output_dim, hyper={}):

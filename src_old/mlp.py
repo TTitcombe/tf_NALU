@@ -3,6 +3,7 @@ import tensorflow as tf
 
 from base_cell import BaseCell
 
+
 class MLP(BaseCell):
     ACT_FUNCS = {'relu': tf.nn.relu,
                  'relu6': tf.nn.relu6,

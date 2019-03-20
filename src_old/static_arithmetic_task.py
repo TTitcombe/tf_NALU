@@ -1,11 +1,13 @@
+from __future__ import absolute_import
+
 import numpy as np
 import tensorflow as tf
 
 from nac import NAC
 from nalu import NALU
 from mlp import MLP
+from tf_NALU.Utils.utils import operations, create_data
 
-from utils import operations, create_data
 
 def testAll():
     results_dir = "results/"
@@ -21,7 +23,7 @@ def testAll():
 
         counter = 0
         nalu_err = np.nan
-        while (np.isnan(nalu_err) and counter < 10):
+        while np.isnan(nalu_err) and counter < 10:
             # NALU can often become NaN
             counter += 1
             print("NALU")
@@ -43,5 +45,8 @@ def testAll():
             f.write("MLP err: {} | {}\n".format(mlp_err, mlp_err/max_score))
             f.write("Random err: {} | {}\n".format(random_err, random_err/max_score))
 
+
 if __name__ == "__main__":
-    testAll()
+    pass
+    #testAll()
+

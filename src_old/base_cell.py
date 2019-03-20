@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
+
 class BaseCell:
     def __init__(self, input_dim, hidden_dim, output_dim, hyper={}):
 
