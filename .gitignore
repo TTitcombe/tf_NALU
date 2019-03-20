@@ -1,11 +1,2 @@
-__pycache__/
-
-tmp.png
-
-
-# Old code to not upload
-old_code/
-old_results/
-
-# Results not yet ready
-results/Interpolation.txt
+.idea/
+*.pyc
