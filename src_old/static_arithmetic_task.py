@@ -3,17 +3,18 @@ from __future__ import absolute_import
 import numpy as np
 import tensorflow as tf
 
-from nac import NAC
-from nalu import NALU
-from mlp import MLP
-from tf_NALU.Utils.utils import operations, create_data
+from .nac import NAC
+from .nalu import NALU
+from .mlp import MLP
+from utils.functions import OPERATIONS
+from utils.data import create_static_data as create_data
 
 
 def testAll():
     results_dir = "results/"
     filename = "static_arithmetic_test.txt"
 
-    for _op, op_func in operations.items():
+    for _op, op_func in OPERATIONS.items():
         x, y, x_test, y_test = create_data(50000, 100, 0, 1000, 1000, 10000, op_func)
         print("In operation {}".format(_op))
         print("NAC")
@@ -47,6 +48,5 @@ def testAll():
 
 
 if __name__ == "__main__":
-    pass
-    #testAll()
+    testAll()
 

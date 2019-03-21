@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from base_cell import BaseCell
+from .base_cell import BaseCell
 
 
 class NALU(BaseCell):

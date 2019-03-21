@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import os
 import tensorflow as tf
 
-from mlp import MLP
+from .mlp import MLP
 
 
 def generate_data(n, min=-5., max=5., seed=42):
