@@ -1,24 +1,27 @@
+import numpy as np
 import tensorflow as tf
 import tensorflow.contrib.eager as tfe
 
-from models import mlp, nac, nalu
+from src.models.mlp import MLP
+from src.models.nac import NAC
+from src.models.nalu import NALU
 from utils.collections import LOSSES
 
 
 class Trainer:
-    models = {"MLP": mlp,
-              "NAC": nac,
-              "NALU": nalu}
+    models = {"MLP": MLP,
+              "NAC": NAC,
+              "NALU": NALU}
 
     N_EPOCHS_VERBOSENESS = 20
 
-    def __init__(self, lr, model_name, optimizer_name, *model_args):
+    def __init__(self, lr, model_name, optimizer_name, *model_args, **model_kwargs):
         try:
             model = Trainer.models[model_name]
         except KeyError:
             raise RuntimeError("You have entered an unsupported model type.")
         else:
-            self.model = model(*model_args)
+            self.model = model(*model_args, **model_kwargs)
 
         try:
             optimizer = LOSSES[optimizer_name]
@@ -70,3 +73,17 @@ class Trainer:
         self.optimizer.apply_gradients(zip(grads, self.model.variables),
                                        global_step=tf.train.get_or_create_global_step())
         return loss
+
+
+if __name__ == "__main__":
+    # Test that trainer works
+    print("Testing the Trainer class...")
+    tf.enable_eager_execution()
+
+    trainer = Trainer(0.1, "MLP", "Adam", 5, 1, [], act_func="relu")
+
+    x_data = np.random.random((10, 5))
+    y_data = np.sum(x_data, axis=1)
+    y_data = np.reshape(y_data, (10,1))
+
+    trainer.train(x_data, y_data, verbose=True)

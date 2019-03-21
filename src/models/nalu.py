@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 import tensorflow as tf
 
-from nac import NACLayer
+from .nac import NACLayer
 
 
 class NALULayer(NACLayer):
@@ -33,11 +33,11 @@ class NALU(tf.keras.Model):
     def __init__(self, output_dim, hidden_dim=[]):
         super(NALU, self).__init__()
         hidden_dim.append(output_dim)
-        self.layers = []
+        self._layers = []
         for dim in hidden_dim:
-            self.layers.append(NALULayer(dim))
+            self._layers.append(NALULayer(dim))
 
     def call(self, data):
-        for layer in self.layers:
+        for layer in self._layers:
             data = layer(data)
         return data

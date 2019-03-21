@@ -13,15 +13,15 @@ class MLP(tf.keras.Model):
 
     def __init__(self, input_dim, output_dim, hidden_dim=[], act_func=None):
         super(MLP, self).__init__()
-        self.layers = []
+        self._layers = []
         hidden_dim.append(output_dim)
         for dim in hidden_dim:
-            self.layers.append(tf.keras.layers.Dense(dim, input_shape=(input_dim,)))
+            self._layers.append(tf.keras.layers.Dense(dim, input_shape=(input_dim,)))
             input_dim = dim
         self.act_func = self._retrieve_act_func(act_func)
 
     def call(self, data):
-        for layer in self.layers:
+        for layer in self._layers:
             data = layer(data)
             data = self.act_func(data)
         return data
