@@ -2,13 +2,13 @@ import tensorflow as tf
 
 
 class MLP(tf.keras.Model):
-    ACT_FUNCS = {'relu': tf.relu,
-                 'relu6': tf.relu6,
-                 'elu': tf.elu,
-                 'leaky': tf.leaky_relu,
+    ACT_FUNCS = {'relu': tf.nn.relu,
+                 'relu6': tf.nn.relu6,
+                 'elu': tf.nn.elu,
+                 'leaky': tf.nn.leaky_relu,
                  'sigmoid': tf.sigmoid,
                  'tanh': tf.tanh,
-                 'softplus': tf.softplus,
+                 'softplus': tf.nn.softplus,
                  'None': lambda x: x}
 
     def __init__(self, input_dim, output_dim, hidden_dim=[], act_func=None):

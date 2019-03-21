@@ -6,7 +6,7 @@ import tensorflow as tf
 from .nac import NAC
 from .nalu import NALU
 from .mlp import MLP
-from utils.functions import OPERATIONS
+from utils.collections import OPERATIONS
 from utils.data import create_static_data as create_data
 
 
