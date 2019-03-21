@@ -13,7 +13,7 @@ class Trainer:
               "NAC": NAC,
               "NALU": NALU}
 
-    N_EPOCHS_VERBOSENESS = 20
+    N_EPOCHS_VERBOSENESS = 1
 
     def __init__(self, lr, model_name, optimizer_name, *model_args, **model_kwargs):
         try:
@@ -50,9 +50,9 @@ class Trainer:
             if epoch % Trainer.N_EPOCHS_VERBOSENESS == 0:
                 print("After epoch {} model loss is {}.\n".format(epoch, loss))
 
-            if x_test is not None:
-                test_loss = self._loss(x_test, y_test)
-                print("test loss is {}".format(test_loss))
+                if x_test is not None:
+                    test_loss = self._loss(x_test, y_test)
+                    print("test loss is {}".format(test_loss))
 
     def _train_epoch(self, x, y, verbose):
         for step in range(self.n_steps):
