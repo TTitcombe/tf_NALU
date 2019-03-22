@@ -29,8 +29,15 @@ def test_func(x, y, x_test, y_test, func_name, lr, **training_kwargs):
 
 
 def save_results(results, file_to_save):
-    for func_name, func_dict in results.items():
-        max_val = max(func_dict.keys(), key=(lambda k: func_dict[k]))
+    with open(file_to_save, "a") as f:
+        f.write("Results displayed are mean-squared error.\n")
+        f.write("Data is written as absolute | relative, where relative is "
+                "absolute scores normalised by the maximum score for that function.\n")
+        for func_name, func_dict in results.items():
+            f.write("\nOperation {}\n".format(func_name))
+            max_loss = max(func_dict.keys(), key=(lambda k: func_dict[k]))
+            for model_name, model_loss in func_dict.items():
+                f.write("{}: {} | {}\n".format(model_name, model_loss, model_loss/max_loss))
 
 
 if __name__ == "__main__":
@@ -45,8 +52,6 @@ if __name__ == "__main__":
     max_test = 10000  # to test interpolation, set max_test = max_val
     seed = 42
 
-    filename = os.path.join("results", "static_arithmetic.txt")  # Assuming you're in tf_NALU directory
-
     results = {}
     # Loop through arithmetic operations
     for op_name, func in OPERATIONS.items():
@@ -54,5 +59,6 @@ if __name__ == "__main__":
                                                   max_test, func, n_subset=15, seed=seed)
         results[op_name] = test_func(x, y, x_test, y_test, 0.1, batch_size=100)
 
+    filename = os.path.join("results", "static_arithmetic.txt")  # Assuming you're in tf_NALU directory
     save_results(results, filename)
 

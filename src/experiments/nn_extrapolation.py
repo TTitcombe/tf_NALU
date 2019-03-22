@@ -1,3 +1,5 @@
+import os
+import matplotlib.pyplot as plt
 import tensorflow as tf
 
 from src.trainer import Trainer
@@ -33,7 +35,18 @@ def test(x, x_test, lr, **training_kwargs):
     return results
 
 
+def plot_and_save(x, results, filename):
+    for func_name, data in results.items():
+        plt.plot(x, data, label=func_name)
+
+    plt.savefig(filename)
+    plt.show()
+
+
 if __name__ == "__main__":
     tf.enable_eager_execution()
     x, x_extrapolation = get_data(5000, -5, 5, 1000, -20, 20, seed=42)
     results = test(x, x_extrapolation, 0.1, batch_size=100)
+
+    save_filename = os.path.join("figures", "extrapolation_test.png")  # Assuming you're in tf_NALU directory
+    plot_and_save(x_extrapolation, results, save_filename)
