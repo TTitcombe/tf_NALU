@@ -30,7 +30,7 @@ class Trainer:
         else:
             self.optimizer = optimizer(lr)
 
-    def _loss(self, x, y):
+    def loss(self, x, y):
         return tf.losses.mean_squared_error(self.model(x), y)
 
     def train(self, x, y, x_test=None, y_test=None, n_epochs=100, batch_size=-1, verbose=False):
@@ -68,7 +68,7 @@ class Trainer:
 
     def _train_step(self, x_batch, y_batch):
         with tfe.GradientTape() as tape:
-            loss = self._loss(x_batch, y_batch)
+            loss = self.loss(x_batch, y_batch)
         grads = tape.gradient(loss, self.model.variables)
         self.optimizer.apply_gradients(zip(grads, self.model.variables),
                                        global_step=tf.train.get_or_create_global_step())

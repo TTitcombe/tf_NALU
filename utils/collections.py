@@ -13,4 +13,6 @@ OPERATIONS = {
 
 ACT_FUNCS = ["relu", "relu6", "elu", "leaky", "sigmoid", "tanh", "softplus", "None"]
 
+MODELS = ["MLP", "NAC", "NALU"]
+
 LOSSES = {"Adam": tf.train.AdamOptimizer}
