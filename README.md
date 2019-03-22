@@ -8,9 +8,17 @@ Explanation of the paper, and a write-up of this code, can be found [here](https
 
 This code currently provides a NAC module, a NALU module, and a MLP.
 
-To perform the static numerical tests, run **static_arithmetic_task.py**.
+## Requirements
+* Python3 only (why are you using Py2??)
+* tensorflow
+* numpy
 
-The proof-of-necessity experiment in the paper, trying to learn the identity mapping with a neural network, can be carried out in **test_nn_extrapolation.py**. The results of the quick test done with this code can be seen above.
+## How to use
+This codebase implements graph-based tensorflow (in `src_old`) and eager tensorflow in `src`.
+The eager code has had more recent development, so I would suggest using this!
+
+To run an experiment, for example the static_arithmetic_task, run `python -m src.experiments.static_arithmetic` while in the `tf_NALU` directory. 
+Run `python -m src.experiments.nn_extrapolation` to perform the proof-of-necessity experiment. The results of the quick test done with this code can be seen above.
 
 
 ## Results
