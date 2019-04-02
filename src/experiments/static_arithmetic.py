@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import tensorflow as tf
 
 from src.trainer import Trainer
@@ -17,34 +18,40 @@ def test_func(x, y, x_test, y_test, func_name, lr, **training_kwargs):
     func_results = {}
     print("\n--------- TESTING {} ---------\n".format(func_name))
     for model in MODELS:
-        print("Training {} model now....\n".format(model))
-        trainer = Trainer(lr, model, "Adam",
-                          INPUT_DIM, OUTPUT_DIM, HIDDEN_DIM)
-    trainer.train(x, y, x_test, y_test, **training_kwargs)
-    extrapolation_loss = trainer.loss(x_test, y_test)
+        print("\nTraining {} model now....".format(model))
+        if model in ("MLP", "relu", "None"):
+            model_args = [INPUT_DIM, OUTPUT_DIM, HIDDEN_DIM, model]
+            model = "MLP"
+        else:
+            model_args = [OUTPUT_DIM, HIDDEN_DIM]
+        trainer = Trainer(lr, model, "RMS",
+                          *model_args)
+        trainer.train(x, y, x_test, y_test, **training_kwargs)
+        extrapolation_loss = trainer.loss(x_test, y_test)
 
-    func_results[func_name] = extrapolation_loss
+        func_results[model] = extrapolation_loss
 
     return func_results
 
 
-def save_results(results, file_to_save):
+def save_results(results, file_to_save, op_name):
     with open(file_to_save, "a") as f:
-        f.write("Results displayed are mean-squared error.\n")
-        f.write("Data is written as absolute | relative, where relative is "
-                "absolute scores normalised by the maximum score for that function.\n")
-        for func_name, func_dict in results.items():
-            f.write("\nOperation {}\n".format(func_name))
-            max_loss = max(func_dict.keys(), key=(lambda k: func_dict[k]))
-            for model_name, model_loss in func_dict.items():
-                f.write("{}: {} | {}\n".format(model_name, model_loss, model_loss/max_loss))
+        f.write("\nOperation {}\n".format(op_name))
+        max_loss = -1
+        for _, loss in results.items():
+            loss = float(loss)
+            if not np.isnan(loss) and loss > max_loss:
+                max_loss = loss
+        for model_name, model_loss in results.items():
+            model_loss = float(model_loss)
+            f.write("{}: {} | {}\n".format(model_name, model_loss, model_loss/max_loss))
 
 
 if __name__ == "__main__":
     tf.enable_eager_execution()
 
     # Data variables
-    n = 50000
+    n = 5000
     dim = 100  # for a simple test, set dim = 2
     min_val = 0
     max_val = 1000
@@ -52,13 +59,15 @@ if __name__ == "__main__":
     max_test = 10000  # to test interpolation, set max_test = max_val
     seed = 42
 
-    results = {}
+    filename = os.path.join("results", "static_arithmetic_eager.txt")  # Assuming you're in tf_NALU directory
+    with open(filename, "a") as f:
+        f.write("Results displayed are mean-squared error.\n")
+        f.write("Data is written as absolute | relative, where relative is "
+                "absolute scores normalised by the maximum score for that function.\n")
+
     # Loop through arithmetic operations
     for op_name, func in OPERATIONS.items():
         x, y, x_test, y_test = create_static_data(n, dim, min_val, max_val, min_test,
                                                   max_test, func, n_subset=15, seed=seed)
-        results[op_name] = test_func(x, y, x_test, y_test, 0.1, batch_size=100)
-
-    filename = os.path.join("results", "static_arithmetic.txt")  # Assuming you're in tf_NALU directory
-    save_results(results, filename)
-
+        op_results = test_func(x, y, x_test, y_test, op_name, 0.01, batch_size=100)
+        save_results(op_results, filename, op_name)

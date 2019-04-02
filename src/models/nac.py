@@ -10,8 +10,8 @@ class NACLayer(tf.keras.layers.Layer):
         self.output_units = output_units
 
     def build(self, input_shape):
-        self.W_hat = self.add_variable("W_hat", [input_shape[-1], self.output_units])
-        self.M_hat = self.add_variable("M_hat", [input_shape[-1], self.output_units])
+        self.W_hat = self.add_variable("W_hat", [int(input_shape[-1]), int(self.output_units)])
+        self.M_hat = self.add_variable("M_hat", [int(input_shape[-1]), int(self.output_units)])
 
     def call(self, data):
         W = tf.multiply(tf.tanh(self.W_hat), tf.sigmoid(self.M_hat))

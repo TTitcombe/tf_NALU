@@ -11,8 +11,10 @@ OPERATIONS = {
              }
 
 
-ACT_FUNCS = ["relu", "relu6", "elu", "leaky", "sigmoid", "tanh", "softplus", "None"]
+ACT_FUNCS = ["relu", "elu", "leaky", "sigmoid", "tanh", "softplus", "None"]
+# Note, known issue with eager relu6, so it has been ommitted from our test
 
 MODELS = ["MLP", "NAC", "NALU"]
 
-LOSSES = {"Adam": tf.train.AdamOptimizer}
+OPTIMS = {"Adam": tf.train.AdamOptimizer,
+          "RMS": tf.train.RMSPropOptimizer}

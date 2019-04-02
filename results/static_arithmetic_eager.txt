@@ -1,0 +1,67 @@
+Results displayed are mean-squared error.
+Data is written as absolute | relative, where relative is absolute scores normalised by the maximum score for that function.
+
+Operation add
+MLP: 3798862.75 | 1.0
+NAC: 54291.11328125 | 0.014291412155190392
+NALU: nan | nan
+Results displayed are mean-squared error.
+Data is written as absolute | relative, where relative is absolute scores normalised by the maximum score for that function.
+
+Operation subtract
+MLP: 6093786.5 | 1.0
+NAC: 34820.1796875 | 0.005714046543557114
+NALU: nan | nan
+Results displayed are mean-squared error.
+Data is written as absolute | relative, where relative is absolute scores normalised by the maximum score for that function.
+
+Operation multiply
+MLP: 1.8184797041983488e+17 | 0.8317113502670173
+NAC: 2.1864312704335872e+17 | 1.0
+NALU: nan | nan
+Results displayed are mean-squared error.
+Data is written as absolute | relative, where relative is absolute scores normalised by the maximum score for that function.
+
+Operation divide
+MLP: 692717.9375 | 0.7577637632547283
+NAC: 914160.8125 | 1.0
+NALU: nan | nan
+Results displayed are mean-squared error.
+Data is written as absolute | relative, where relative is absolute scores normalised by the maximum score for that function.
+
+Operation square
+MLP: 3.131037920780511e+19 | 0.8252529520490898
+NAC: 3.7940341964317655e+19 | 1.0
+NALU: nan | nan
+Results displayed are mean-squared error.
+Data is written as absolute | relative, where relative is absolute scores normalised by the maximum score for that function.
+
+Operation root
+MLP: 41728.3125 | 0.09679545630991108
+NAC: 431097.84375 | 1.0
+NALU: nan | nan
+Results displayed are mean-squared error.
+Data is written as absolute | relative, where relative is absolute scores normalised by the maximum score for that function.
+Results displayed are mean-squared error.
+Data is written as absolute | relative, where relative is absolute scores normalised by the maximum score for that function.
+Results displayed are mean-squared error.
+Data is written as absolute | relative, where relative is absolute scores normalised by the maximum score for that function.
+
+Operation add
+MLP: 3268230.75 | 4.1851206400575846e-05
+NAC: 34677.83984375 | 4.4406577865620237e-07
+NALU: 78091673600.0 | 1.0
+
+Operation subtract
+MLP: 4203292.5 | 0.001038877529395593
+NAC: 32146.66796875 | 7.945307398349138e-06
+NALU: 4045994240.0 | 1.0
+
+Operation multiply
+MLP: 1.8185013508335206e+17 | 0.8299183682557922
+NAC: 2.1864312704335872e+17 | 0.9978323477351103
+NALU: 2.1911809888668877e+17 | 1.0
+Results displayed are mean-squared error.
+Data is written as absolute | relative, where relative is absolute scores normalised by the maximum score for that function.
+Results displayed are mean-squared error.
+Data is written as absolute | relative, where relative is absolute scores normalised by the maximum score for that function.

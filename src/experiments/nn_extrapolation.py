@@ -14,6 +14,8 @@ def get_data(n, min_val, max_val, n_test, min_test, max_test, seed=None):
 
 
 def test(x, x_test, lr, **training_kwargs):
+    print("TensorFlow version: {}".format(tf.__version__))
+    print("Eager execution: {}".format(tf.executing_eagerly()))
     if not tf.executing_eagerly():
         raise RuntimeError("You must enable tensorflow eager execution before running this function!")
 
@@ -30,23 +32,26 @@ def test(x, x_test, lr, **training_kwargs):
         trainer.train(x, x, x_test, x_test, **training_kwargs)
         y_extrapolation = trainer.model(x_test)
 
-        results[func] = y_extrapolation
+        results[func] = abs(y_extrapolation-x_test)
 
     return results
 
 
 def plot_and_save(x, results, filename):
     for func_name, data in results.items():
-        plt.plot(x, data, label=func_name)
+        plt.scatter(x, data, label=func_name, alpha=0.8)
 
+    plt.xlabel("X value")
+    plt.ylabel("Absolute difference")
+    plt.legend()
     plt.savefig(filename)
     plt.show()
 
 
 if __name__ == "__main__":
     tf.enable_eager_execution()
-    x, x_extrapolation = get_data(5000, -5, 5, 1000, -20, 20, seed=42)
-    results = test(x, x_extrapolation, 0.1, batch_size=100)
+    x, x_extrapolation = get_data(1000, -5, 5, 100, -20, 20, seed=42)
+    results = test(x, x_extrapolation, 0.01, batch_size=100)
 
-    save_filename = os.path.join("figures", "extrapolation_test.png")  # Assuming you're in tf_NALU directory
+    save_filename = os.path.join("figures", "extrapolation_test_eager.png")  # Assuming you're in tf_NALU directory
     plot_and_save(x_extrapolation, results, save_filename)
