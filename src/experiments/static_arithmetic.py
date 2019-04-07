@@ -17,10 +17,12 @@ def test_func(x, y, x_test, y_test, func_name, lr, **training_kwargs):
 
     func_results = {}
     print("\n--------- TESTING {} ---------\n".format(func_name))
+    filename = os.path.join("results", "static_arithmetic_eager.txt")
+
     for model in MODELS:
         print("\nTraining {} model now....".format(model))
         if model in ("MLP", "relu", "None"):
-            model_args = [INPUT_DIM, OUTPUT_DIM, HIDDEN_DIM, model]
+            model_args = [INPUT_DIM, OUTPUT_DIM, HIDDEN_DIM]
             model = "MLP"
         else:
             model_args = [OUTPUT_DIM, HIDDEN_DIM]
@@ -44,14 +46,14 @@ def save_results(results, file_to_save, op_name):
                 max_loss = loss
         for model_name, model_loss in results.items():
             model_loss = float(model_loss)
-            f.write("{}: {} | {}\n".format(model_name, model_loss, model_loss/max_loss))
+            f.write("{}: {:.3f} | {:.3f}\n".format(model_name, model_loss, model_loss/max_loss))
 
 
 if __name__ == "__main__":
     tf.enable_eager_execution()
 
     # Data variables
-    n = 5000
+    n = 500
     dim = 100  # for a simple test, set dim = 2
     min_val = 0
     max_val = 1000

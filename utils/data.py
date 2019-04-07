@@ -12,7 +12,7 @@ def create_static_data(n, dim, minVal, maxVal, minTest, maxTest, func, n_subset=
     # this ensures a-b > 0 and a/b > 1
 
     x = np.random.uniform(minVal, maxVal, size=(n, dim))
-    x_test = np.random.uniform(minTest, maxTest, size=(1000, dim))
+    x_test = np.random.uniform(minTest, maxTest, size=(100, dim))
 
     selection = np.random.choice(dim, n_subset)
     _selection = selection[:split]

@@ -9,7 +9,7 @@ class MLP(tf.keras.Model):
                  'sigmoid': tf.sigmoid,
                  'tanh': tf.tanh,
                  'softplus': tf.nn.softplus,
-                 'None': lambda x: x}
+                 'None': tf.identity}
 
     def __init__(self, input_dim, output_dim, hidden_dim=[], act_func=None):
         super(MLP, self).__init__()
@@ -18,12 +18,12 @@ class MLP(tf.keras.Model):
         for dim in hidden_dim:
             self._layers.append(tf.keras.layers.Dense(dim, input_shape=(input_dim,)))
             input_dim = dim
-        self.act_func = self._retrieve_act_func(act_func)
+        self._act_func = self._retrieve_act_func(act_func)
 
     def call(self, data):
         for layer in self._layers:
             data = layer(data)
-            data = self.act_func(data)
+            data = self._act_func(data)
         return data
 
     @staticmethod

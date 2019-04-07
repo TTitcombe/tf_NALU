@@ -13,9 +13,10 @@ class Trainer:
               "NAC": NAC,
               "NALU": NALU}
 
-    N_EPOCHS_VERBOSENESS = 1
+    N_EPOCHS_VERBOSENESS = 1000
 
     def __init__(self, lr, model_name, optimizer_name, *model_args, **model_kwargs):
+        self._test_scores = []
         try:
             model = Trainer.models[model_name]
         except KeyError:
@@ -46,7 +47,8 @@ class Trainer:
             x_test = tf.convert_to_tensor(x_test)
             y_test = tf.convert_to_tensor(y_test)
         for epoch in range(n_epochs):
-            print("\nStarting epoch {}...".format(epoch))
+            if epoch % Trainer.N_EPOCHS_VERBOSENESS == 0:
+                print("\nStarting epoch {}...".format(epoch))
 
             # For static arithmetic model, loss is our error measure too
             loss = self._train_epoch(x, y, verbose)
@@ -59,24 +61,29 @@ class Trainer:
                 break
 
             if epoch % Trainer.N_EPOCHS_VERBOSENESS == 0:
-                print("After epoch {} model loss is {}.".format(epoch, loss))
+                print("After epoch {} model loss is {:.6f}.".format(epoch, loss))
 
                 if x_test is not None:
                     test_loss = self.loss(x_test, y_test)
-                    print("test loss is {}".format(test_loss))
+                    print("test loss is {:.6f}".format(test_loss))
+
+                if self._end_training(test_loss):
+                    break
 
     def _train_epoch(self, x, y, verbose):
         for step in range(self.n_steps):
             x_batch = x[step*self.batch_size:(step+1)*self.batch_size]
             y_batch = y[step*self.batch_size:(step+1)*self.batch_size]
 
-            x_batch = tf.convert_to_tensor(x_batch)
-            y_batch = tf.convert_to_tensor(y_batch)
+            if x_batch.shape[0] > 0:
 
-            loss = self._train_step(x_batch, y_batch)
+                x_batch = tf.convert_to_tensor(x_batch)
+                y_batch = tf.convert_to_tensor(y_batch)
 
-            if verbose:
-                print("At step {} loss is {}".format(step, loss))
+                loss = self._train_step(x_batch, y_batch)
+
+                if verbose:
+                    print("At step {} loss is {:.6f}".format(step, loss))
 
         return loss
 
@@ -88,6 +95,16 @@ class Trainer:
                                        global_step=tf.train.get_or_create_global_step())
         return loss
 
+    def _end_training(self, test_loss):
+        if len(self._test_scores) < 10:
+            self._test_scores.append(test_loss)
+        else:
+            if test_loss > np.mean(self._test_scores) + np.std(self._test_scores):
+                return True
+            else:
+                self._test_scores.pop(0)
+                self._test_scores.append(test_loss)
+        return False
 
 if __name__ == "__main__":
     # Test that trainer works
